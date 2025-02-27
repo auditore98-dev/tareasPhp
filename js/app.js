@@ -27,14 +27,19 @@ const getAllTasks = () => {
                 <td>
                  <input type='color' class='form-control form-control-color p-0' disabled value='${tarea.color}'/>
                 </td>
-               <td>
-               <form  class='form-actualizar-edit' >
+               <td class='d-flex flex-md-row flex-column gap-1'>
+               <form  class='form-actualizar-edit' method='POST' >
                <input type='text' class='d-none' value='${tarea.id_tarea}' name='idTarea'></input>
-               <input type='submit' class="btn btn-success btn-actualizar" value='Actualizar' data-bs-toggle="modal" data-bs-target="#modal-actualizar"></input>
+               <button type='submit' class="btn btn-success btn-actualizar" data-bs-toggle="modal" data-bs-target="#modal-actualizar">
+               <i class="ti ti-edit pe-none"></i>
+               </button>
                </form>
-               <form form-eliminar-edit>
-               <input type='text' class='d-none' value='${tarea.id_tarea}'></input>  
-                <input type='submit' class="btn btn-danger" value='Eliminar'></input>
+               <form class='form-eliminar' method='POST'>
+               <input type='text' class='d-none' name='idTarea' value='${tarea.id_tarea}'>
+               </input>  
+                <button type='submit' class="btn btn-danger btn-eliminar">
+                <i class='ti ti-trash pe-none'></i>
+                </button>
                </form>
                </td>
                </tr>
@@ -101,11 +106,12 @@ const addTask = () => {
 }
 
 const getByIdTask=()=>{
-    document.addEventListener("click",(e)=>{
-       
-       if(e.target.classList.contains("btn-actualizar")){
+    const tableTareas=document.querySelector(".table-tareas");
+    tableTareas.addEventListener("click",(e)=>{
+        console.log(e);
         e.preventDefault();
-       
+       if(e.target.classList.contains("btn-actualizar")){
+        
         const formData=new FormData(e.target.closest(".form-actualizar-edit"));
         
         fetch("php/get_by_id_tarea.php",{
@@ -124,9 +130,55 @@ const getByIdTask=()=>{
                 categoria.value=data.data.categorias_id_categoria;
             }
         }).catch(error=>console.error("hubo un error en la peticion ",error));
+       }else if(e.target.classList.contains("btn-eliminar")){
+            console.log("se encontro boton eliminar",e.target);
+            console.log(e.target.closest(".form-eliminar"));
+            const dataForm=new FormData(e.target.closest(".form-eliminar"));
+            console.log(dataForm);
+
+            Swal.fire({
+                title:"¿Esta seguro de eliminar la tarea?",
+                icon:"warning",
+                showDenyButton:true,
+                confirmButtonText:"Si",
+                denyButtonText:"No"
+            }).then(response=>{
+                if(response.isConfirmed){
+                    fetch("php/delete_tarea.php",{
+                        method:"POST",
+                        body:dataForm
+                    }).then(response=>response.json()).
+                    then(data=>{
+                        if(data.status=="success"){
+                            Swal.fire({
+                                title:"Tarea eliminada",
+                                icon:"success",
+                                confirmButtonText:"Cerrar"
+                            }).then(response=>{
+                                if(response.isConfirmed){
+                                    window.location.href="index.html";
+                                }
+                            });
+                        }else{
+                            Swal.fire({
+                                title:"Error",
+                                text:`${data.message}`,
+                                icon:"error"
+                            });
+                        }
+                    });
+                }else if(response.isDenied){
+                    Swal.fire({
+                        title:"Operacion cancelada",
+                        icon:"success",
+                        confirmButtonText:"Cerrar"
+                    });
+                }
+            });
        }
     });
 }
+
 
 const updateTask=()=>{
     const formActualizar=document.querySelectorAll(".form-actualizar");
@@ -154,7 +206,18 @@ const updateTask=()=>{
                         }
                     });
                  }
-            }).catch(error=>console.error("Hubo un erroren la peticion ",error));     
+            }).catch(error=>console.error("Hubo un error en la peticion ",error));     
         });
+    });
+}
+
+const deleteTask=()=>{
+    //delegacion de eventos 
+    document.addEventListener("click",(e)=>{
+        e.preventDefault();
+        if(e.target.classList.contains("btn-eliminar")){
+            
+
+        }
     });
 }
