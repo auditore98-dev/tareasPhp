@@ -1,6 +1,7 @@
 <?php
 
 require_once("config/database.php");
+
 $idCategory=$_POST['idCategory'];
 $nombre=$_POST['nombreCategory'];
 $color=$_POST['colorCategory'];

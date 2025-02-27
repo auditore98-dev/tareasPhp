@@ -8,7 +8,7 @@ $sql = "SELECT *FROM tareas WHERE id_tarea=$idTarea";
 
 try {
     $query = mysqli_query($connection, $sql);
-    if (!$query) {
+    if (!$query) {  
         throw new Exception(mysqli_error($connection));
     } else {
         if (mysqli_num_rows($query) > 0) {

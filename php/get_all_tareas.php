@@ -1,7 +1,7 @@
 <?php
 require_once("config/database.php");
 
-$sql="SELECT nombre_tarea,nombre,color
+$sql="SELECT id_tarea,nombre_tarea,nombre,color
 FROM tareas INNER JOIN categorias ON
 tareas.categorias_id_categoria=categorias.id_categoria";
 
