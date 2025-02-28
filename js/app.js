@@ -211,13 +211,3 @@ const updateTask=()=>{
     });
 }
 
-const deleteTask=()=>{
-    //delegacion de eventos 
-    document.addEventListener("click",(e)=>{
-        e.preventDefault();
-        if(e.target.classList.contains("btn-eliminar")){
-            
-
-        }
-    });
-}
