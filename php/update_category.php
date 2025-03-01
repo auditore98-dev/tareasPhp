@@ -7,7 +7,7 @@ $nombre = $_POST['nombreCategoria'];
 $color = $_POST['colorCategoria'];
 
 try {
-    if (empty($idCategory) && empty($nombre) && empty($color)) {
+    if (empty($idCategory) || empty($nombre) || empty($color)) {
         echo json_encode(array('status' => 'empty', 'message' => 'datos vacios'));
     } else {
         $sql = "UPDATE categorias SET nombre='$nombre', color=

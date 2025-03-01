@@ -5,7 +5,7 @@ try {
 $nombre = $_POST["nombreTarea"];
 $categoriaId = $_POST["categoriaId"];
 
-if(empty($nombre) && empty($categoriaId)){
+if(empty($nombre) || empty($categoriaId)){
     echo json_encode(["status"=>"empty","message"=> "datos enviados vacios"]);
 }else{
     $sql = "INSERT INTO tareas(nombre_tarea,categorias_id_categoria)
